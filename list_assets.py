@@ -92,7 +92,7 @@ ftnt_asset_headers = {
 
 ftnt_asset_payload = {
 # "accountId": 854651
-  "serialNumber": "FGT", # specific or pattern like FGT, FGR, FS, FSR, etc.
+  "serialNumber": "F", # specific or pattern like FGT, FGVM, FGR, FR, S, SR, FP, etc.
   # "productModel": "FortiGate 90D***", 
   # "expireBefore": "2019-01-20T10:11:11-8:00",
   # "status": "Registered"
@@ -102,6 +102,10 @@ ftnt_asset_response = requests.post(ftnt_asset_url,headers=ftnt_asset_headers,js
 
 # return a dictionary
 data = ftnt_asset_response.json()
+
+if data['message'] == 'No product found':
+    print("No matching products found in the asset portal. Exiting.")
+    sys.exit(1)
 
 # grabs just the assets section of the return
 data_dict = data['assets']
@@ -116,6 +120,17 @@ for item in data_dict:
     assets.append(new_data_dict)
 
 # print(json.dumps(assets,indent=4,sort_keys=True))
+
+"""
+placeholder for device sn in fc comparison to device sn in fmg
+
+device_sn = []
+
+for item in assets:
+    device_sn.append(item['serialNumber'])
+
+print(device_sn)
+"""
 
 csv_fields = []
 
