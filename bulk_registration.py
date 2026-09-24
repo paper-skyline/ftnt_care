@@ -61,6 +61,7 @@ load_dotenv()
 fc_username = os.getenv("fc_username")
 fc_password = os.getenv("fc_password")
 fc_client_id = os.getenv("fc_client_id")
+licenses = os.getenv("licenses")
 
 ftnt_fac_url = "https://customerapiauth.fortinet.com/api/v1/oauth/token/"
 
@@ -123,9 +124,6 @@ def query_asset_portal(license):
     elif data['status'] != 0:
         print(data['error']['message'] + "\n Exiting with error.")
         sys.exit(1)
-
-
-licenses = ["E4711-0UFNB-QEKED-VKWNZ-RNQ6HC"]
 
 for item in licenses:
     query_asset_portal(item)
