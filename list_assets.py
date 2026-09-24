@@ -88,56 +88,66 @@ ftnt_asset_headers = {
     "Authorization": "Bearer " + ftnt_fac_access_token
 }
 
-# Needs either serialNumber (exact or pattern) or expireBefore as required values; could make this into a function and loop
+def query_asset_portal(pattern):
+    # Needs either serialNumber (exact or pattern) or expireBefore as required values; could make this into a function and loop
 
-ftnt_asset_payload = {
-# "accountId": 854651
-  "serialNumber": "F", # specific or pattern like FGT, FGVM, FGR, FR, S, SR, FP, etc.
-  # "productModel": "FortiGate 90D***", 
-  # "expireBefore": "2019-01-20T10:11:11-8:00",
-  # "status": "Registered"
-}
+    ftnt_asset_payload = {
+    # "accountId": 854651
+    "serialNumber": pattern, # specific or pattern like FGT, FGVM, FGR, FR, S, SR, FP, etc.
+    # "productModel": "FortiGate 90D***", 
+    # "expireBefore": "2019-01-20T10:11:11-8:00",
+    # "status": "Registered"
+    }
 
-ftnt_asset_response = requests.post(ftnt_asset_url,headers=ftnt_asset_headers,json=ftnt_asset_payload,allow_redirects=False)
+    ftnt_asset_response = requests.post(ftnt_asset_url,headers=ftnt_asset_headers,json=ftnt_asset_payload,allow_redirects=False)
 
-# return a dictionary
-data = ftnt_asset_response.json()
+    # return a dictionary
+    data = ftnt_asset_response.json()
 
-if data['message'] == 'No product found':
-    print("No matching products found in the asset portal. Exiting.")
-    sys.exit(1)
+    if data['message'] == 'No product found':
+        print("No matching products found in the asset portal. Exiting.")
+        sys.exit(1)
 
-# grabs just the assets section of the return
-data_dict = data['assets']
+    # grabs just the assets section of the return
+    data_dict = data['assets']
 
-assets = []
+    assets = []
 
-# choose which fields specifically to use when filtering down the data_dict
-data_keys = ['status', 'serialNumber', 'registrationDate', 'productModel', 'isDecommissioned', 'description']
+    # choose which fields specifically to use when filtering down the data_dict
+    data_keys = ['status', 'serialNumber', 'registrationDate', 'productModel', 'isDecommissioned', 'description']
 
-for item in data_dict:
-    new_data_dict = {k: item[k] for k in data_keys if k in item}
-    assets.append(new_data_dict)
+    for item in data_dict:
+        new_data_dict = {k: item[k] for k in data_keys if k in item}
+        assets.append(new_data_dict)
 
-# print(json.dumps(assets,indent=4,sort_keys=True))
+    # print(json.dumps(assets,indent=4,sort_keys=True))
 
-"""
-placeholder for device sn in fc comparison to device sn in fmg
+    """
+    placeholder for device sn in fc comparison to device sn in fmg
 
-device_sn = []
+    device_sn = []
 
-for item in assets:
-    device_sn.append(item['serialNumber'])
+    for item in assets:
+        device_sn.append(item['serialNumber'])
 
-print(device_sn)
-"""
+    print(device_sn)
+    """
 
-csv_fields = []
+    csv_fields = []
 
-for key in assets[0]:
-    csv_fields.append(key)
+    for key in assets[0]:
+        csv_fields.append(key)
 
-with open('fc-devices.csv', 'w') as csvfile:
-    writer = csv.DictWriter(csvfile,fieldnames=csv_fields)
-    writer.writeheader()
-    writer.writerows(assets)
+    with open('fc-devices.csv', 'a') as csvfile:
+        writer = csv.DictWriter(csvfile,fieldnames=csv_fields)
+        writer.writeheader()
+        writer.writerows(assets)
+
+
+sn_pattern = ["FGT", "FGVM", "FR"]
+
+for item in sn_pattern:
+    query_asset_portal(item)
+
+print("script ran successfully")
+sys.exit(0)
