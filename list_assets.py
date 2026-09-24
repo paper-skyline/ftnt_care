@@ -6,6 +6,9 @@ Last Updated: 22 Sep 2026
 This python script uses an API call to the FortiCare Asset Portal to pull a list of devices.
 After pulling a subset of fields for each device, the script exports the data to a csv file.
 
+In this example script, FortiGate, FortiGate Rugged, and FortiGate VM devices will be returned. Adjust
+the 'sn_pattern' list for your own use case.
+
 You must create a '.env' file within the project directory and create several string variables:
 
   __fc_username__ - that contains your FortiCare username
@@ -89,7 +92,7 @@ ftnt_asset_headers = {
 }
 
 def query_asset_portal(pattern):
-    # Needs either serialNumber (exact or pattern) or expireBefore as required values; could make this into a function and loop
+    # Needs either serialNumber (exact or pattern) or expireBefore as required values
 
     ftnt_asset_payload = {
     # "accountId": 854651
@@ -138,11 +141,12 @@ def query_asset_portal(pattern):
     for key in assets[0]:
         csv_fields.append(key)
 
+    print(csv_fields)
+
     with open('fc-devices.csv', 'a') as csvfile:
         writer = csv.DictWriter(csvfile,fieldnames=csv_fields)
         writer.writeheader()
         writer.writerows(assets)
-
 
 sn_pattern = ["FGT", "FGVM", "FR"]
 
