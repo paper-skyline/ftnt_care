@@ -11,6 +11,7 @@ You must create a '.env' file within the project directory and create several st
   __fc_password__ - that contains your FortiCare password
   __fc_client_id__ - that contains your FortiCare client_id
   __fc_grant_type__ - that contains the type of grants for the FortiCare user
+  __licenses__ - that contains a list of licenses to register
 
 Full API documentation for FortiManager and other Fortinet products is available
 on their Fortinet Developers Network website: 
