@@ -21,8 +21,11 @@ If you don't have *pipenv* installed, from your terminal run: `pip install pipen
 After cloning the project, create a __.env__ file within the directory. Define and populate the following string variables with details for your environment:
 
   __fc_username__ - that contains your FortiCare username
+
   __fc_password__ - that contains your FortiCare password
+
   __fc_client_id__ - that contains your FortiCare client_id
+  
   __fc_grant_type__ - that contains the type of grants for the FortiCare user
 
 From the project directory, install the dependencies by running `pipenv install` and then run the script with your virtual environment by running `pipenv run python list_assets.py`
