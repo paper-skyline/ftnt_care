@@ -126,6 +126,16 @@ def query_asset_portal(license):
         print(data['error']['message'] + "\n Exiting with error.")
         sys.exit(1)
 
+
+
+# Can load license keys from a text file with one key per line in addition to loading from .env file
+
+with open('fc-devices.csv', 'r') as file:
+    for line in file:
+        # Strip trailing newlines or whitespace if needed
+        clean_line = line.rstrip("\n")
+        licenses.append(clean_line)
+
 for item in licenses:
     query_asset_portal(item)
 
