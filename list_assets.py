@@ -125,33 +125,22 @@ def query_asset_portal(pattern):
 
     # print(json.dumps(assets,indent=4,sort_keys=True))
 
-    """
-    placeholder for device sn in fc comparison to device sn in fmg
-
-    device_sn = []
-
-    for item in assets:
-        device_sn.append(item['serialNumber'])
-
-    print(device_sn)
-    """
-
     csv_fields = []
 
     for key in assets[0]:
         csv_fields.append(key)
 
-    print(csv_fields)
+    # print(csv_fields)
 
     with open('fc-devices.csv', 'a') as csvfile:
         writer = csv.DictWriter(csvfile,fieldnames=csv_fields)
         writer.writeheader()
         writer.writerows(assets)
 
-sn_pattern = ["FGT", "FGVM", "FR"]
+sn_pattern = ["FGT", "FGVM", "FR", "FGR"]
 
 for item in sn_pattern:
     query_asset_portal(item)
 
-print("script ran successfully")
+print("Script ran successfully. Verify output in the 'fc-devices.csv' file.")
 sys.exit(0)
